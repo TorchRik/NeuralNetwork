@@ -2,6 +2,7 @@
 #include <Eigen/Dense>
 #include <vector>
 #include <iostream>
+#include "activations_functions.h"
 
 namespace NeuralNetwork {
 using Vector = Eigen::VectorXd;

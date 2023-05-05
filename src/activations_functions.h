@@ -1,7 +1,6 @@
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <vector>
-#include <iostream>
 
 
 namespace NeuralNetwork::ActivationsFunctions {

@@ -1,3 +1,10 @@
+#include <Eigen/Core>
+#include <Eigen/Dense>
+#include <vector>
+#include "activations_functions.h"
+#include "layer.h"
+#include "lose_functions.h"
+
 namespace NeuralNetwork {
 using Vector = Eigen::VectorXd;
 using Matrix = Eigen::MatrixXd;
@@ -49,7 +56,7 @@ class NeuralNetwork {
     std::vector<Vector> computedLayers = computeEachLayer(x);
 
     auto u = lossFunction_->getDerivative(y, computedLayers[layers_count]);
-    for (size_t index = layers_count - 1; ; --index) {
+    for (size_t index = layers_count - 1;; --index) {
       layersDeltas[index] -= layers_[index].getDerivative(
           computedLayers[index], u
       );
