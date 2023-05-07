@@ -1,0 +1,13 @@
+# Build folders
+build*/
+_build*/
+cmake-build*/
+
+# CMake
+CMakeUserPresets.json
+
+# IDEs
+.idea/
+
+# Mac
+.DS_Store
