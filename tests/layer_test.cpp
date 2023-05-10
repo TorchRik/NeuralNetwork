@@ -2,14 +2,19 @@
 
 #include <gtest/gtest.h>
 
+TEST(layerTest, randomInit) {
+  auto layer = NeuralNetwork::Layer(
+      {5, 10},
+      NeuralNetwork::ActivationsFunctions::ActivationFunctionType::RELU);
+  NeuralNetwork::LayerDimension expectedDimension{5, 10};
+  assert(layer.getLayerDimension().n == expectedDimension.n);
+}
 
-TEST(layer_test, random_init) {
-  Eigen::VectorXd a(5);
-  std::cout << a.rows();
-//  auto layer = NeuralNetwork::Layer(
-//      {5, 10},
-//      std::make_unique<NeuralNetwork::ActivationsFunctions::Relu>()
-//      );
-//  NeuralNetwork::LayerDimension expectedDimension{5, 10};
-//  assert(layer.getLayerDimension().n == expectedDimension.n);
+TEST(sigmoidTest, derivative) {
+  auto function =
+      NeuralNetwork::ActivationsFunctions::getActivationFunctionByType(
+          NeuralNetwork::ActivationsFunctions::ActivationFunctionType::RELU
+      );
+  NeuralNetwork::Vector x(10);
+  std::cout << function->getDerivative(x);
 }

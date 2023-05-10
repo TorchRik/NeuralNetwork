@@ -1,5 +1,6 @@
 #include <Eigen/Core>
 #include <Eigen/Dense>
+#include <utility>
 #include <vector>
 #include "activations_functions.h"
 
@@ -10,10 +11,6 @@ using Matrix = Eigen::MatrixXd;
 struct LayerDimension {
   ssize_t n;
   ssize_t m;
-
-  bool operator==(const LayerDimension& other) {
-    return other.n == n && other.m == m;
-  }
 };
 
 struct LayerDelta {
@@ -25,35 +22,55 @@ struct LayerDelta {
     deltaB -= other.deltaB;
     return *this;
   }
+  const LayerDelta& operator/=(double num) {
+    deltaA /= num;
+    deltaB /= num;
+    return *this;
+  }
+  LayerDelta operator/(double num) {
+    auto layerDelta = *this;
+    layerDelta.deltaA /= num;
+    layerDelta.deltaB /= num;
+    return layerDelta;
+  }
 };
 
 class Layer {
-  using ActivationFunction =
+  using ActivationFunctionPtr =
       std::unique_ptr<ActivationsFunctions::BaseActivationFunction>;
+  using ActivationFunctionType = ActivationsFunctions::ActivationFunctionType;
 
  public:
-  Layer(LayerDimension dimension, ActivationFunction function) {
+  Layer(LayerDimension dimension, ActivationFunctionType functionType) {
     assert(dimension.n > 0 && dimension.m > 0);
     A_ = Matrix::Random(dimension.n, dimension.m);
     b_ = Vector::Random(dimension.n);
-    nonLinearFunction_ = std::move(function);
+    activationFunction =
+        ActivationsFunctions::getActivationFunctionByType(functionType);
+  }
+  Layer(Matrix&& A, Vector&& b, ActivationFunctionType functionType) {
+    assert(A.rows() == b.rows());
+    A_ = std::move(A);
+    b_ = std::move(b);
+    activationFunction =
+        ActivationsFunctions::getActivationFunctionByType(functionType);
   }
 
   Vector compute(const Vector& x) const {
     assert(x.rows() == A_.cols());
-    return nonLinearFunction_->compute(A_ * x + b_);
+    return activationFunction->compute(A_ * x + b_);
   }
 
   Matrix getDerivativeA(const Vector& x, const Vector& u) const {
     assert(x.rows() == A_.cols());
     assert(u.rows() == b_.rows());
-    return nonLinearFunction_->getDerivative(A_ * x + b_) * u * x.transpose();
+    return (activationFunction->getDerivative(A_ * x + b_)) * u * x.transpose();
   }
 
   Vector getDerivativeB(const Vector& x, const Vector& u) const {
     assert(x.rows() == A_.cols());
     assert(u.rows() == b_.rows());
-    return nonLinearFunction_->getDerivative(A_ * x + b_) * u;
+    return activationFunction->getDerivative(A_ * x + b_) * u;
   }
 
   LayerDelta getDerivative(const Vector& x, const Vector& u) const {
@@ -63,11 +80,16 @@ class Layer {
   Vector getNextU(const Vector& x, Vector& u) const {
     assert(x.rows() == A_.cols());
     assert(u.rows() == b_.rows());
-    return (u.transpose() * nonLinearFunction_->getDerivative(A_ * x + b_) * A_)
+    return (u.transpose() * activationFunction->getDerivative(A_ * x + b_) * A_)
         .transpose();
   }
 
-  std::pair<Matrix, Vector> getWeights() const { return {A_, b_}; }
+  const Matrix& getA() const { return A_; }
+  const Vector& getB() const { return b_; }
+
+  ActivationFunctionType getActivationFunctionType() const {
+    return activationFunction->getName();
+  }
 
   LayerDimension getLayerDimension() const { return {A_.rows(), A_.cols()}; }
 
@@ -83,6 +105,6 @@ class Layer {
  private:
   Matrix A_;
   Vector b_;
-  ActivationFunction nonLinearFunction_;
+  ActivationFunctionPtr activationFunction;
 };
 }  // namespace NeuralNetwork

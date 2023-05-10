@@ -34,7 +34,7 @@ endif ()
 set_if_undefined(CMAKE_CXX_VISIBILITY_PRESET hidden)
 set_if_undefined(CMAKE_VISIBILITY_INLINES_HIDDEN ON)
 
-add_library(NeuralNetwork include/NeuralNetwork/neural_network.cpp) # initialized below
+add_library(NeuralNetwork include/NeuralNetwork/neural_network.cpp include/NeuralNetwork/saver.h src/constants.h) # initialized below
 add_library(NeuralNetwork::NeuralNetwork ALIAS NeuralNetwork)
 
 #----------------------------------------------------------------------------------------------------------------------
@@ -152,9 +152,9 @@ set_target_properties(NeuralNetwork PROPERTIES
     add_subdirectory(tests)
 #endif ()
 
-if (MYLIB_BUILD_EXAMPLES)
+#if (MYLIB_BUILD_EXAMPLES)
     add_subdirectory(examples)
-endif ()
+#endif ()
 
 if (MYLIB_BUILD_DOCS)
     find_package(Doxygen REQUIRED)
