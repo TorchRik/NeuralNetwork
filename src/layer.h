@@ -17,6 +17,11 @@ struct LayerDelta {
   Matrix deltaA;
   Vector deltaB;
 
+  const LayerDelta& operator+=(const LayerDelta&& other) {
+    deltaA += other.deltaA;
+    deltaB += other.deltaB;
+    return *this;
+  }
   const LayerDelta& operator-=(const LayerDelta&& other) {
     deltaA -= other.deltaA;
     deltaB -= other.deltaB;
@@ -27,10 +32,21 @@ struct LayerDelta {
     deltaB /= num;
     return *this;
   }
+  const LayerDelta& operator*=(double num) {
+    deltaA *= num;
+    deltaB *= num;
+    return *this;
+  }
   LayerDelta operator/(double num) {
     auto layerDelta = *this;
     layerDelta.deltaA /= num;
     layerDelta.deltaB /= num;
+    return layerDelta;
+  }
+  LayerDelta operator*(double num) {
+    auto layerDelta = *this;
+    layerDelta.deltaA *= num;
+    layerDelta.deltaB *= num;
     return layerDelta;
   }
 };
@@ -56,24 +72,25 @@ class Layer {
         ActivationsFunctions::getActivationFunctionByType(functionType);
   }
 
-  Vector compute(const Vector& x) const {
+  [[nodiscard]] Vector compute(const Vector& x) const {
     assert(x.rows() == A_.cols());
     return activationFunction->compute(A_ * x + b_);
   }
 
-  Matrix getDerivativeA(const Vector& x, const Vector& u) const {
+  [[nodiscard]] Matrix getDerivativeA(const Vector& x, const Vector& u) const {
     assert(x.rows() == A_.cols());
     assert(u.rows() == b_.rows());
     return (activationFunction->getDerivative(A_ * x + b_)) * u * x.transpose();
   }
 
-  Vector getDerivativeB(const Vector& x, const Vector& u) const {
+  [[nodiscard]] Vector getDerivativeB(const Vector& x, const Vector& u) const {
     assert(x.rows() == A_.cols());
     assert(u.rows() == b_.rows());
     return activationFunction->getDerivative(A_ * x + b_) * u;
   }
 
-  LayerDelta getDerivative(const Vector& x, const Vector& u) const {
+  [[nodiscard]] LayerDelta getDerivative(const Vector& x,
+                                         const Vector& u) const {
     return {getDerivativeA(x, u), getDerivativeB(x, u)};
   }
 
@@ -84,14 +101,16 @@ class Layer {
         .transpose();
   }
 
-  const Matrix& getA() const { return A_; }
-  const Vector& getB() const { return b_; }
+  [[nodiscard]] const Matrix& getA() const { return A_; }
+  [[nodiscard]] const Vector& getB() const { return b_; }
 
-  ActivationFunctionType getActivationFunctionType() const {
+  [[nodiscard]] ActivationFunctionType getActivationFunctionType() const {
     return activationFunction->getName();
   }
 
-  LayerDimension getLayerDimension() const { return {A_.rows(), A_.cols()}; }
+  [[nodiscard]] LayerDimension getLayerDimension() const {
+    return {A_.rows(), A_.cols()};
+  }
 
   const Layer& operator+=(const LayerDelta& other) & {
     assert(A_.cols() == other.deltaA.cols() &&

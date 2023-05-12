@@ -1,6 +1,5 @@
 #include <NeuralNetwork/neural_network.h>
 
-#include <fstream>
 #include <iostream>
 #include <vector>
 
@@ -63,7 +62,6 @@ Vector performNumToProbabilityVector(int num) {
   return v;
 }
 
-// Read the MNIST labels from a ubyte file
 std::vector<Vector> readMnistLabels(const std::string& file_path) {
   std::ifstream file(file_path, std::ios::binary);
 
@@ -95,6 +93,22 @@ std::vector<Vector> readMnistLabels(const std::string& file_path) {
   return labels;
 }
 
+double getCountPredicted(const NeuralNetwork::NeuralNetwork& model,
+                         std::vector<Vector>& X, std::vector<Vector>& Y) {
+  double count = 0;
+  for (int i = 0; i < X.size(); ++i) {
+    auto p = model.predict(X[i]);
+    int max_index = 0;
+    for (auto j = 0; j < p.size(); ++j) {
+      if (p[j] > p[max_index]) {
+        max_index = j;
+      }
+    }
+    count += Y[i][max_index];
+  }
+  return count;
+}
+
 int main(int, char*[]) {
   auto images = readMnistImages(
       "/Users/torchrik/stash/cpp-lib-template/examples/mnist/data/"
@@ -109,19 +123,20 @@ int main(int, char*[]) {
       "/Users/torchrik/stash/cpp-lib-template/examples/mnist/data/"
       "t10k-labels-idx1-ubyte");
 
-  size_t layersCount = 3;
+  size_t layersCount = 1;
   ssize_t imageSize = images[0].size();
+  ssize_t hiddenSize = 50;
   ssize_t predictionSize = 10;
-  std::cout << imageSize << "\n";
   std::vector<NeuralNetwork::LayerDimension> dimensions(layersCount);
-  dimensions[0] = {100, imageSize};
-  dimensions[1] = {100, 100};
-  dimensions[2] = {10, 100};
-  std::vector<ActivationFunctionType> functions(layersCount,
-                                                ActivationFunctionType::SIGMOID);
+
+  dimensions[0] = {predictionSize, imageSize};
+
+  std::vector<ActivationFunctionType> functions(
+      layersCount, ActivationFunctionType::SOFTMAX);
   auto model = NeuralNetwork::NeuralNetwork(dimensions, functions,
                                             LossFunctionType::SQUARE);
-  model.train(5, 500, images, labels, imagesTest, labelsTest);
+  model.train(10, 2000, images, labels, imagesTest, labelsTest);
   model.saveDataToFile(
-      "/Users/torchrik/stash/cpp-lib-template/examples/mnist/saved_model");
+      "/Users/torchrik/stash/cpp-lib-template/examples/mnist/saved_models/1");
+  std::cout << getCountPredicted(model, imagesTest, labelsTest);
 }

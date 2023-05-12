@@ -24,7 +24,7 @@ class NeuralNetwork {
     assert(!dimensions.empty());
     assert(dimensions.size() == activationFunctionsTypes.size());
 
-    LayerDimension lastDimension;
+    LayerDimension lastDimension{};
     size_t layers_size = dimensions.size();
     layers_.reserve(layers_size);
     for (size_t index = 0; index < layers_size; ++index) {
@@ -41,14 +41,15 @@ class NeuralNetwork {
   NeuralNetwork(const std::string& pathToFile) {
     std::ifstream file(pathToFile, std::ios::binary);
     assert(file);
-    size_t num_layers;
-    file.read(reinterpret_cast<char*>(&num_layers), sizeof(num_layers));
-
-    for (size_t i = 0; i < num_layers; ++i) {
+    size_t layers_size;
+    file.read(reinterpret_cast<char*>(&layers_size), sizeof(layers_size));
+    layers_.reserve(layers_size);
+    for (size_t i = 0; i < layers_size; ++i) {
       size_t rows, cols, vec_size;
       ActivationFunctionType type;
 
       file.read(reinterpret_cast<char*>(&type), sizeof(type));
+
       file.read(reinterpret_cast<char*>(&rows), sizeof(rows));
       file.read(reinterpret_cast<char*>(&cols), sizeof(cols));
       file.read(reinterpret_cast<char*>(&vec_size), sizeof(vec_size));
@@ -70,7 +71,7 @@ class NeuralNetwork {
     file.close();
   }
 
-  Vector predict(const Vector& x) {
+  [[nodiscard]] Vector predict(const Vector& x) const {
     assert(x.size() == layers_[0].getLayerDimension().m);
     Vector computedX = x;
     for (const auto& layer : layers_) {
@@ -79,7 +80,7 @@ class NeuralNetwork {
     return computedX;
   }
 
-  std::vector<Vector> computeEachLayer(const Vector& x) {
+  [[nodiscard]] std::vector<Vector> computeEachLayer(const Vector& x) const {
     assert(x.size() == layers_[0].getLayerDimension().m);
 
     Vector computed = x;
@@ -124,14 +125,12 @@ class NeuralNetwork {
       addOnIterationsDeltas(batchX[index], batchY[index], layersDeltas);
     }
     for (size_t j = 0; j < layers_.size(); ++j) {
-      std::cout << layersDeltas[j].deltaB << std::endl;
       layersDeltas[j] /= indexes.size();
-      std::cout << layersDeltas[j].deltaB << std::endl;
       layers_[j] += layersDeltas[j];
     }
   }
 
-  double getAverageLoss(std::vector<Vector>& X, std::vector<Vector>& Y) {
+  double getAverageLoss(std::vector<Vector>& X, std::vector<Vector>& Y) const {
     assert(X.size() == Y.size());
     double loss = 0;
     for (size_t index = 0; index < X.size(); ++index) {
@@ -144,7 +143,7 @@ class NeuralNetwork {
   void train(size_t iterationCount, size_t batchSize, std::vector<Vector>& X,
              std::vector<Vector>& Y, std::vector<Vector>& testX,
              std::vector<Vector>& testY) {
-    size_t currentIterationNum = 0;
+    ssize_t currentIterationNum = 0;
     assert(X.size() == Y.size());
 
     std::random_device rd;
@@ -153,20 +152,17 @@ class NeuralNetwork {
     std::vector<size_t> indexes(batchSize);
 
     for (size_t i = 0; i < iterationCount; ++i) {
-//      std::cout << "Iteration " << currentIterationNum
-//                << " average loss for test data " << std::endl
-//                << getAverageLoss(testX, testY) << std::endl;
       for (size_t j = 0; j < batchSize; ++j) {
         indexes[j] = dist(gen);
       }
       trainByBatch(X, Y, indexes);
       std::cout << "Iteration " << ++currentIterationNum
-                << " average loss for test data " << std::endl
+                << " average loss for test data "
                 << getAverageLoss(testX, testY) << std::endl;
     }
   }
 
-  void saveDataToFile(const std::string& pathToFile) {
+  void saveDataToFile(const std::string& pathToFile) const {
     std::ofstream file(pathToFile, std::ios::binary);
     assert(file);
 
@@ -179,6 +175,7 @@ class NeuralNetwork {
       const auto functionType = layer.getActivationFunctionType();
       file.write(reinterpret_cast<const char*>(&functionType),
                  sizeof(functionType));
+
       size_t rows = A.rows();
       size_t cols = A.cols();
       size_t vec_size = b.size();
@@ -198,7 +195,6 @@ class NeuralNetwork {
                sizeof(lossFunctionType));
     file.close();
   }
-
  private:
   std::vector<Layer> layers_;
   LossFunctionPtr lossFunction_;

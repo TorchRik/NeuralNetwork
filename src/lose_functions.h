@@ -27,7 +27,7 @@ class SquareLossFunction : public BaseLossFunction {
   }
   Vector getDerivative(const Vector& expected_y,
                        const Vector& predicted_y) final {
-    return 2 * (expected_y - predicted_y);
+    return 2 * (predicted_y - expected_y);
   }
   LossFunctionType getType() final { return LossFunctionType::SQUARE; }
 };
