@@ -16,6 +16,7 @@ class BaseLossFunction {
   virtual Vector getDerivative(const Vector& expected_y,
                                const Vector& predicted_y) = 0;
   virtual LossFunctionType getType() = 0;
+  virtual ~BaseLossFunction() = default;
 };
 
 class SquareLossFunction : public BaseLossFunction {

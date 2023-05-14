@@ -96,7 +96,7 @@ std::vector<Vector> readMnistLabels(const std::string& file_path) {
 double getCountPredicted(const NeuralNetwork::NeuralNetwork& model,
                          std::vector<Vector>& X, std::vector<Vector>& Y) {
   double count = 0;
-  for (int i = 0; i < X.size(); ++i) {
+  for (size_t i = 0; i < X.size(); ++i) {
     auto p = model.predict(X[i]);
     int max_index = 0;
     for (auto j = 0; j < p.size(); ++j) {

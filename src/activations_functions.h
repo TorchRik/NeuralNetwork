@@ -13,6 +13,7 @@ class BaseActivationFunction {
   virtual Vector compute(const Vector& x) = 0;
   virtual Matrix getDerivative(const Vector& x) = 0;
   virtual ActivationFunctionType getName() = 0;
+  virtual ~BaseActivationFunction() = default;
 };
 
 class Sigmoid : public BaseActivationFunction {

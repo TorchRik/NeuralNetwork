@@ -176,9 +176,9 @@ class NeuralNetwork {
       file.write(reinterpret_cast<const char*>(&functionType),
                  sizeof(functionType));
 
-      size_t rows = A.rows();
-      size_t cols = A.cols();
-      size_t vec_size = b.size();
+      ssize_t rows = A.rows();
+      ssize_t cols = A.cols();
+      ssize_t vec_size = b.size();
 
       file.write(reinterpret_cast<const char*>(&rows), sizeof(rows));
       file.write(reinterpret_cast<const char*>(&cols), sizeof(cols));
