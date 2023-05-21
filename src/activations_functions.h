@@ -6,7 +6,7 @@ namespace NeuralNetwork::ActivationsFunctions {
 using Vector = Eigen::VectorXd;
 using Matrix = Eigen::MatrixXd;
 
-enum ActivationFunctionType { RELU, SIGMOID, SOFTMAX};
+enum class ActivationFunctionType { Relu, Sigmoid, Softmax };
 
 class BaseActivationFunction {
  public:
@@ -27,7 +27,7 @@ class Sigmoid : public BaseActivationFunction {
         .asDiagonal();
   }
   ActivationFunctionType getName() final {
-    return ActivationFunctionType::SIGMOID;
+    return ActivationFunctionType::Sigmoid;
   }
 };
 
@@ -38,7 +38,7 @@ class Relu : public BaseActivationFunction {
     return (x.array() > 0.0).cast<double>().matrix().asDiagonal();
   }
   ActivationFunctionType getName() final {
-    return ActivationFunctionType::RELU;
+    return ActivationFunctionType::Relu;
   }
 };
 
@@ -54,20 +54,21 @@ class Softmax : public BaseActivationFunction {
     return diagonal - computeSoftmax * computeSoftmax.transpose();
   }
   ActivationFunctionType getName() final {
-    return ActivationFunctionType::SOFTMAX;
+    return ActivationFunctionType::Softmax;
   }
 };
 
-std::unique_ptr<BaseActivationFunction> getActivationFunctionByType(
+inline std::unique_ptr<BaseActivationFunction> getActivationFunctionByType(
     ActivationFunctionType type) {
   switch (type) {
-    case ActivationFunctionType::RELU:
+    case ActivationFunctionType::Relu:
       return std::make_unique<Relu>();
-    case ActivationFunctionType::SIGMOID:
+    case ActivationFunctionType::Sigmoid:
       return std::make_unique<Sigmoid>();
-    case ActivationFunctionType::SOFTMAX:
+    case ActivationFunctionType::Softmax:
       return std::make_unique<Softmax>();
+    default:
+      throw std::runtime_error("Incorrect type provided");
   }
 }
 }  // namespace NeuralNetwork::ActivationsFunctions
-

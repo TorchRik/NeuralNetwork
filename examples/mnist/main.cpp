@@ -3,12 +3,9 @@
 #include <iostream>
 #include <vector>
 
-const int kImageSize = 28 * 28;
-
 using Vector = NeuralNetwork::Vector;
-using ActivationFunctionType =
-    NeuralNetwork::ActivationsFunctions::ActivationFunctionType;
-using LossFunctionType = NeuralNetwork::LossFunctions::LossFunctionType;
+using Matrix = NeuralNetwork::Matrix;
+const int kImageSize = 28 * 28;
 
 Vector imageToVector(const unsigned char* image_data) {
   Vector image_vector(kImageSize);
@@ -123,20 +120,20 @@ int main(int, char*[]) {
       "/Users/torchrik/stash/cpp-lib-template/examples/mnist/data/"
       "t10k-labels-idx1-ubyte");
 
-  size_t layersCount = 1;
-  ssize_t imageSize = images[0].size();
-  ssize_t hiddenSize = 50;
-  ssize_t predictionSize = 10;
-  std::vector<NeuralNetwork::LayerDimension> dimensions(layersCount);
+  auto model = NeuralNetwork::NeuralNetwork(
+      {images[0].size(), 16, 16, 10},
+      {NeuralNetwork::ActivationFunctionType::Relu,
+       NeuralNetwork::ActivationFunctionType::Relu,
+       NeuralNetwork::ActivationFunctionType::Softmax},
+      NeuralNetwork::LossFunctionType::SQUARE);
+  model.train(150, 2000, 0.05, images, labels, imagesTest, labelsTest);
 
-  dimensions[0] = {predictionSize, imageSize};
-
-  std::vector<ActivationFunctionType> functions(
-      layersCount, ActivationFunctionType::SOFTMAX);
-  auto model = NeuralNetwork::NeuralNetwork(dimensions, functions,
-                                            LossFunctionType::SQUARE);
-  model.train(10, 2000, images, labels, imagesTest, labelsTest);
-  model.saveDataToFile(
-      "/Users/torchrik/stash/cpp-lib-template/examples/mnist/saved_models/1");
-  std::cout << getCountPredicted(model, imagesTest, labelsTest);
+  std::ofstream file("/Users/torchrik/stash/cpp-lib-template/examples/mnist/saved_models/1", std::ios::binary);
+  file << model;
+  file.close();
+  NeuralNetwork::NeuralNetwork new_model;
+  std::ifstream file_is("/Users/torchrik/stash/cpp-lib-template/examples/mnist/saved_models/1", std::ios::binary);
+  file_is >> new_model;
+  std::cout << getCountPredicted(model, imagesTest, labelsTest) << std:: endl;
+  std::cout << getCountPredicted(new_model, imagesTest, labelsTest);
 }

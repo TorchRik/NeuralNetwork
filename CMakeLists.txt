@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 set(CMAKE_CXX_STANDARD 17)
+set(CXX_STANDARD_REQUIRED ON)
 
 project(NeuralNetwork
         VERSION 0.0.1
@@ -45,6 +46,9 @@ find_package(Eigen3 REQUIRED)
 include_directories(${EIGEN3_INCLUDE_DIR})
 target_link_libraries(NeuralNetwork Eigen3::Eigen)
 
+include_directories(./EigenRand)
+
+
 #----------------------------------------------------------------------------------------------------------------------
 # NeuralNetwork sources
 #----------------------------------------------------------------------------------------------------------------------
@@ -63,6 +67,7 @@ set(sources
         include/NeuralNetwork/neural_network.h
         src/activations_functions.h
         src/layer.h
+        src/layer.cpp
         src/lose_functions.h
         )
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" FILES ${sources})

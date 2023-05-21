@@ -5,7 +5,7 @@
 namespace NeuralNetwork::LossFunctions {
 using Vector = Eigen::VectorXd;
 
-enum LossFunctionType {
+enum class LossFunctionType {
   SQUARE,
 };
 
@@ -33,10 +33,13 @@ class SquareLossFunction : public BaseLossFunction {
   LossFunctionType getType() final { return LossFunctionType::SQUARE; }
 };
 
-std::unique_ptr<BaseLossFunction> getLossFunctionByType(LossFunctionType type) {
+inline std::unique_ptr<BaseLossFunction> getLossFunctionByType(
+    LossFunctionType type) {
   switch (type) {
     case LossFunctionType::SQUARE:
       return std::make_unique<SquareLossFunction>();
+    default:
+      throw std::runtime_error("Incorrect type provided");
   }
 }
 
