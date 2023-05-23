@@ -1,6 +1,8 @@
 \babel@toc {russian}{}
-\contentsline {section}{\numberline {1}Введение}{2}{section.1}%
-\contentsline {section}{\numberline {2}Описание структуры нейронной сети}{2}{section.2}%
-\contentsline {section}{\numberline {3}Описание алгоритма обучения}{2}{section.3}%
-\contentsline {section}{\numberline {4}Описание функциональных и нефункциональных требований к программному проекту}{4}{section.4}%
-\contentsline {section}{\numberline {5}Инструменты, используемые в проекте}{4}{section.5}%
+\contentsline {section}{\numberline {1}Введение}{3}{section.1}%
+\contentsline {section}{\numberline {2}Основные идеи нейронных сетей:}{3}{section.2}%
+\contentsline {section}{\numberline {3}Основные математические выкладки:}{4}{section.3}%
+\contentsline {section}{\numberline {4}Функциональные требования:}{5}{section.4}%
+\contentsline {section}{\numberline {5}Нефункциональные требования:}{6}{section.5}%
+\contentsline {section}{\numberline {6}Детальное описание внешних классов:}{6}{section.6}%
+\contentsline {subsection}{\numberline {6.1}NeuralNetwork}{6}{subsection.6.1}%

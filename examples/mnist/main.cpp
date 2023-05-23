@@ -125,8 +125,8 @@ int main(int, char*[]) {
       {NeuralNetwork::ActivationFunctionType::Relu,
        NeuralNetwork::ActivationFunctionType::Relu,
        NeuralNetwork::ActivationFunctionType::Softmax},
-      NeuralNetwork::LossFunctionType::SQUARE);
-  model.train(150, 2000, 0.05, images, labels, imagesTest, labelsTest);
+      NeuralNetwork::LossFunctionType::Square);
+  model.train(1000, 2000, 0.01, images, labels, imagesTest, labelsTest);
 
   std::ofstream file("/Users/torchrik/stash/cpp-lib-template/examples/mnist/saved_models/1", std::ios::binary);
   file << model;
