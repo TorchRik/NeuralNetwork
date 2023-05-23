@@ -1,6 +1,6 @@
 #include "layer.h"
 
-namespace NeuralNetwork {
+namespace NN {
 
 LayerDelta& LayerDelta::operator+=(const LayerDelta& other) {
   deltaA += other.deltaA;
@@ -38,7 +38,6 @@ Layer::Layer(ssize_t startDimension, ssize_t endDimension,
     : activationFunction(
           ActivationsFunctions::getActivationFunctionByType(functionType)) {
   assert(startDimension > 0 && endDimension > 0);
-  Eigen::Rand::P8_mt19937_64 urng{42};
   A_ = Matrix::Random(endDimension, startDimension);
   b_ = Vector::Random(endDimension);
 }
@@ -174,4 +173,4 @@ std::istream& operator>>(std::istream& is, std::vector<Layer>& layers) {
   return is;
 }
 
-}  // namespace NeuralNetwork
+}  // namespace NN

@@ -11,7 +11,7 @@ endif()
 set(sources main.cpp)
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" FILES ${sources})
 
-add_executable(NeuralNetworkMnist)
+add_executable(NeuralNetworkMnist src/mnist_parser.cpp)
 target_sources(NeuralNetworkMnist PRIVATE ${sources})
 target_link_libraries(NeuralNetworkMnist PRIVATE NeuralNetwork::NeuralNetwork)
 

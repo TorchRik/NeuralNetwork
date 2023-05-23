@@ -2,7 +2,7 @@
 #include <Eigen/Dense>
 #include <vector>
 
-namespace NeuralNetwork::LossFunctions {
+namespace NN::LossFunctions {
 using Vector = Eigen::VectorXd;
 
 enum class LossFunctionType {
@@ -43,4 +43,4 @@ inline std::unique_ptr<BaseLossFunction> getLossFunctionByType(
   }
 }
 
-}  // namespace NeuralNetwork::LossFunctions
+}  // namespace NN::LossFunctions

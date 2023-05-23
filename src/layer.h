@@ -1,11 +1,10 @@
 #include <Eigen/Core>
 #include <Eigen/Dense>
-#include <EigenRand/EigenRand>
 #include <utility>
 #include <vector>
 #include "activations_functions.h"
 
-namespace NeuralNetwork {
+namespace NN {
 using Vector = Eigen::VectorXd;
 using Matrix = Eigen::MatrixXd;
 
@@ -63,4 +62,4 @@ class Layer {
 };
 std::ostream& operator<<(std::ostream& os, const std::vector<Layer>& layers);
 std::istream& operator>>(std::istream& is, std::vector<Layer>& layers);
-}  // namespace NeuralNetwork
+}  // namespace NN

@@ -1,6 +1,6 @@
 #include "neural_network.h"
 
-namespace NeuralNetwork {
+namespace NN {
 
 NeuralNetwork::NeuralNetwork(
     const std::initializer_list<ssize_t>& dimensions,
@@ -130,4 +130,4 @@ std::istream& operator>>(std::istream& is, NeuralNetwork& model) {
   return is;
 }
 
-}  // namespace NeuralNetwork
+}  // namespace NN

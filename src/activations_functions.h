@@ -2,7 +2,7 @@
 #include <Eigen/Dense>
 #include <vector>
 
-namespace NeuralNetwork::ActivationsFunctions {
+namespace NN::ActivationsFunctions {
 using Vector = Eigen::VectorXd;
 using Matrix = Eigen::MatrixXd;
 
@@ -71,4 +71,4 @@ inline std::unique_ptr<BaseActivationFunction> getActivationFunctionByType(
       throw std::runtime_error("Incorrect type provided");
   }
 }
-}  // namespace NeuralNetwork::ActivationsFunctions
+}  // namespace NN::ActivationsFunctions

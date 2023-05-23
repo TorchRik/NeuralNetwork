@@ -8,7 +8,7 @@
 #include "../src/layer.h"
 #include "../src/lose_functions.h"
 
-namespace NeuralNetwork {
+namespace NN {
 using Vector = Eigen::VectorXd;
 using Matrix = Eigen::MatrixXd;
 using LossFunctionType = LossFunctions::LossFunctionType;
@@ -50,4 +50,4 @@ class NeuralNetwork {
   std::vector<Layer> layers_;
   LossFunctionPtr lossFunction_;
 };
-}  // namespace NeuralNetwork
+}  // namespace NN
