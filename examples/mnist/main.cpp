@@ -35,18 +35,18 @@ int main(int, char*[]) {
   auto labelsTest = MNIST::readMnistLabels(
       "/Users/torchrik/stash/cpp-lib-template/examples/mnist/data/"
       "t10k-labels-idx1-ubyte");
-  ssize_t hidden_size = 16;
-  ssize_t output_size = 10;
-  ssize_t iteration_count = 1000;
-  ssize_t batch_size = 2000;
-  double expected_loss = 0.01;
+  ssize_t hiddenSize = 16;
+  ssize_t outputSize = 10;
+  ssize_t iterationCount = 1000;
+  ssize_t batchSize = 2000;
+  double expectedLoss = 0.01;
 
   auto model = NN::NeuralNetwork(
-      {images[0].size(), hidden_size, hidden_size, output_size},
+      {images[0].size(), hiddenSize, hiddenSize, outputSize},
       {NN::ActivationFunctionType::Relu, NN::ActivationFunctionType::Relu,
        NN::ActivationFunctionType::Softmax},
       NN::LossFunctionType::Square);
-  model.train(iteration_count, batch_size, expected_loss, images, labels,
+  model.train(iterationCount, batchSize, expectedLoss, images, labels,
               imagesTest, labelsTest);
 
   std::ofstream file(
