@@ -3,6 +3,7 @@
 #include <utility>
 #include <vector>
 #include "activations_functions.h"
+#include "random.h"
 
 namespace NN {
 using Vector = Eigen::VectorXd;
@@ -27,7 +28,7 @@ class Layer {
 
  public:
   Layer(ssize_t startDimension, ssize_t endDimension,
-        ActivationFunctionType functionType);
+        ActivationFunctionType functionType, Random::Random& random);
   Layer(Matrix&& A, Vector&& b, ActivationFunctionType functionType);
   Layer() = default;
 

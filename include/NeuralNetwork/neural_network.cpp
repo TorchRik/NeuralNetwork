@@ -6,7 +6,8 @@ NeuralNetwork::NeuralNetwork(
     const std::initializer_list<ssize_t>& dimensions,
     const std::initializer_list<ActivationFunctionType>&
         activationFunctionsTypes,
-    LossFunctionType lossFunctionType) {
+    LossFunctionType lossFunctionType, unsigned int randomSeed)
+    : random_(randomSeed) {
   assert(activationFunctionsTypes.size() > 0);
   assert(dimensions.size() == activationFunctionsTypes.size() + 1);
 
@@ -18,10 +19,12 @@ NeuralNetwork::NeuralNetwork(
          functionIt != activationFunctionsTypes.end();
        ++dimensionIt, ++functionIt) {
     assert(*dimensionIt > 0);
-    layers_.emplace_back(*(dimensionIt - 1), *dimensionIt, *functionIt);
+    layers_.emplace_back(*(dimensionIt - 1), *dimensionIt, *functionIt, random_);
   }
   lossFunction_ = LossFunctions::getLossFunctionByType(lossFunctionType);
 }
+
+NeuralNetwork::NeuralNetwork(unsigned int randomSeed): random_(randomSeed) {};
 
 [[nodiscard]] Vector NeuralNetwork::predict(const Vector& x) const {
   assert(x.size() == layers_[0].getStartDimension());
@@ -95,15 +98,10 @@ void NeuralNetwork::train(ssize_t iterationCount, ssize_t batchSize,
   ssize_t currentIterationNum = 0;
   assert(X.size() == Y.size());
 
-  std::random_device rd;
-  std::mt19937 gen(rd());
-  std::uniform_int_distribution<> dist(0, X.size() - 1);
   std::vector<ssize_t> indexes(batchSize);
 
   for (ssize_t i = 0; i < iterationCount; ++i) {
-    for (ssize_t j = 0; j < batchSize; ++j) {
-      indexes[j] = dist(gen);
-    }
+    random_.generateIndexes(X.size(), batchSize, &indexes);
     trainByBatch(X, Y, indexes);
     double loss = getAverageLoss(testX, testY);
     std::cout << "Iteration " << ++currentIterationNum

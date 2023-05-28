@@ -35,7 +35,7 @@ endif ()
 set_if_undefined(CMAKE_CXX_VISIBILITY_PRESET hidden)
 set_if_undefined(CMAKE_VISIBILITY_INLINES_HIDDEN ON)
 
-add_library(NeuralNetwork include/NeuralNetwork/neural_network.cpp)
+add_library(NeuralNetwork include/NeuralNetwork/neural_network.cpp src/random.h src/random.cpp)
 add_library(NeuralNetwork::NeuralNetwork ALIAS NeuralNetwork)
 
 #----------------------------------------------------------------------------------------------------------------------

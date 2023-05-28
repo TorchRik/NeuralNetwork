@@ -2,7 +2,6 @@
 #include <Eigen/Dense>
 #include <fstream>
 #include <iostream>
-#include <random>
 #include <string>
 #include <vector>
 #include "../src/layer.h"
@@ -21,9 +20,9 @@ class NeuralNetwork {
   NeuralNetwork(const std::initializer_list<ssize_t>& dimensions,
                 const std::initializer_list<ActivationFunctionType>&
                     activationFunctionsTypes,
-                LossFunctionType lossFunctionType);
+                LossFunctionType lossFunctionType, unsigned int randomSeed=42);
 
-  NeuralNetwork() = default;
+  NeuralNetwork(unsigned int randomSeed=42);
 
   [[nodiscard]] Vector predict(const Vector& x) const;
 
@@ -49,5 +48,6 @@ class NeuralNetwork {
                          std::vector<LayerDelta>* layersDeltas);
   std::vector<Layer> layers_;
   LossFunctionPtr lossFunction_;
+  Random::Random random_;
 };
 }  // namespace NN

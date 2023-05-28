@@ -34,12 +34,11 @@ LayerDelta LayerDelta::operator*(double num) {
 }
 
 Layer::Layer(ssize_t startDimension, ssize_t endDimension,
-             ActivationFunctionType functionType)
+             ActivationFunctionType functionType, Random::Random& random)
     : activationFunction(
           ActivationsFunctions::getActivationFunctionByType(functionType)) {
   assert(startDimension > 0 && endDimension > 0);
-  A_ = Matrix::Random(endDimension, startDimension);
-  b_ = Vector::Random(endDimension);
+  random.generateRandomWeights(startDimension, endDimension, &A_, &b_);
 }
 Layer::Layer(Matrix&& A, Vector&& b, ActivationFunctionType functionType)
     : A_(std::move(A)),
