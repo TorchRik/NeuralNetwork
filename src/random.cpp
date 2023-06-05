@@ -1,6 +1,6 @@
 #include "random.h"
 
-namespace NN::Random {
+namespace NN {
 Random::Random(unsigned int seed) : generator_(seed){};
 
 void Random::generateIndexes(ssize_t dataSize, ssize_t batchSize,
@@ -17,4 +17,4 @@ void Random::generateRandomWeights(ssize_t startDimension, ssize_t endDimension,
   (*A) = Eigen::Rand::normal<Matrix>(endDimension, startDimension, generator_);
   (*b) = Eigen::Rand::normal<Matrix>(endDimension, 1, generator_);
 }
-}  // namespace NN::Random
+}  // namespace NN

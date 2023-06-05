@@ -4,10 +4,10 @@
 #include <iostream>
 #include <vector>
 
-using namespace NN;
-
-double getCountPredicted(const NN::NeuralNetwork& model, std::vector<Vector>& X,
-                         std::vector<Vector>& Y) {
+namespace {
+double getCountPredicted(const NN::NeuralNetwork& model,
+                         std::vector<NN::Vector>& X,
+                         std::vector<NN::Vector>& Y) {
   double count = 0;
   for (size_t i = 0; i < X.size(); ++i) {
     auto p = model.predict(X[i]);
@@ -21,6 +21,7 @@ double getCountPredicted(const NN::NeuralNetwork& model, std::vector<Vector>& X,
   }
   return count;
 }
+}  // namespace
 
 int main(int, char*[]) {
   auto images = MNIST::readMnistImages(
@@ -54,7 +55,7 @@ int main(int, char*[]) {
       std::ios::binary);
   file << model;
   file.close();
-  NeuralNetwork new_model;
+  NN::NeuralNetwork new_model;
   std::ifstream file_is(
       "/Users/torchrik/stash/cpp-lib-template/examples/mnist/saved_models/1",
       std::ios::binary);

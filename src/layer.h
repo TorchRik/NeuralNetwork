@@ -4,11 +4,9 @@
 #include <vector>
 #include "activations_functions.h"
 #include "random.h"
+#include "definitions.h"
 
 namespace NN {
-using Vector = Eigen::VectorXd;
-using Matrix = Eigen::MatrixXd;
-
 struct LayerDelta {
   Matrix deltaA;
   Vector deltaB;
@@ -22,13 +20,12 @@ struct LayerDelta {
 };
 
 class Layer {
-  using ActivationFunctionPtr =
-      std::unique_ptr<ActivationsFunctions::BaseActivationFunction>;
-  using ActivationFunctionType = ActivationsFunctions::ActivationFunctionType;
+  using ActivationFunctionPtr = std::unique_ptr<BaseActivationFunction>;
+  using ActivationFunctionType = ActivationFunctionType;
 
  public:
   Layer(ssize_t startDimension, ssize_t endDimension,
-        ActivationFunctionType functionType, Random::Random& random);
+        ActivationFunctionType functionType, Random& random);
   Layer(Matrix&& A, Vector&& b, ActivationFunctionType functionType);
   Layer() = default;
 

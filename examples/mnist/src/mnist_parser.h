@@ -5,7 +5,7 @@
 
 
 namespace MNIST {
-const int kImageSize = 28 * 28;
+constexpr int kImageSize = 28 * 28;
 
 Eigen::VectorXd imageToVector(const unsigned char* image_data);
 

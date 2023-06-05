@@ -34,9 +34,9 @@ LayerDelta LayerDelta::operator*(double num) {
 }
 
 Layer::Layer(ssize_t startDimension, ssize_t endDimension,
-             ActivationFunctionType functionType, Random::Random& random)
+             ActivationFunctionType functionType, Random& random)
     : activationFunction(
-          ActivationsFunctions::getActivationFunctionByType(functionType)) {
+          getActivationFunctionByType(functionType)) {
   assert(startDimension > 0 && endDimension > 0);
   random.generateRandomWeights(startDimension, endDimension, &A_, &b_);
 }
@@ -44,7 +44,7 @@ Layer::Layer(Matrix&& A, Vector&& b, ActivationFunctionType functionType)
     : A_(std::move(A)),
       b_(std::move(b)),
       activationFunction(
-          ActivationsFunctions::getActivationFunctionByType(functionType)) {
+          getActivationFunctionByType(functionType)) {
   assert(A_.rows() == b_.rows());
 }
 
@@ -109,7 +109,7 @@ Layer& Layer::operator+=(const LayerDelta& delta) {
 
 std::istream& operator>>(std::istream& is, Layer& layer) {
   ssize_t rows, cols, vec_size;
-  ActivationsFunctions::ActivationFunctionType type;
+  ActivationFunctionType type;
 
   is.read(reinterpret_cast<char*>(&type), sizeof(type));
 
@@ -125,10 +125,9 @@ std::istream& operator>>(std::istream& is, Layer& layer) {
           sizeof(double) * layer.A_.size());
   is.read(reinterpret_cast<char*>(layer.b_.data()), sizeof(double) * vec_size);
   layer.activationFunction =
-      ActivationsFunctions::getActivationFunctionByType(type);
+      getActivationFunctionByType(type);
   return is;
 }
-
 
 std::ostream& operator<<(std::ostream& os, const Layer& layer) {
   const auto functionType = layer.getActivationFunctionType();

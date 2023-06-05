@@ -35,7 +35,7 @@ endif ()
 set_if_undefined(CMAKE_CXX_VISIBILITY_PRESET hidden)
 set_if_undefined(CMAKE_VISIBILITY_INLINES_HIDDEN ON)
 
-add_library(NeuralNetwork include/NeuralNetwork/neural_network.cpp src/random.h src/random.cpp)
+add_library(NeuralNetwork include/NeuralNetwork/neural_network.cpp src/random.h src/random.cpp src/definitions.h)
 add_library(NeuralNetwork::NeuralNetwork ALIAS NeuralNetwork)
 
 #----------------------------------------------------------------------------------------------------------------------
@@ -66,9 +66,11 @@ set(sources
         include/NeuralNetwork/
         include/NeuralNetwork/neural_network.h
         src/activations_functions.h
+        src/activations_functions.cpp
         src/layer.h
         src/layer.cpp
-        src/lose_functions.h
+        src/loss_functions.h
+        src/loss_functions.cpp
         )
 source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}" FILES ${sources})
 

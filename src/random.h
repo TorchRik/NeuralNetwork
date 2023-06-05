@@ -1,10 +1,9 @@
 #include <Eigen/Core>
 #include <EigenRand/EigenRand>
 #include <random>
+#include "definitions.h"
 
-namespace NN::Random {
-using Matrix = Eigen::MatrixXd;
-using Vector = Eigen::VectorXd;
+namespace NN {
 class Random {
  public:
   Random(unsigned int seed);
