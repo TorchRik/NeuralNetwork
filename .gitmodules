@@ -1,0 +1,6 @@
+[submodule "eigen"]
+	path = eigen
+	url = https://github.com/libigl/eigen
+[submodule "EigenRand"]
+	path = EigenRand
+	url = https://github.com/bab2min/EigenRand
