@@ -1,15 +1,14 @@
 # NN
-### Библиотека для создания и обучения нейронных сетей алгоритмом градиентного спуска.
+### Library for the creation and training neural networks by stochastic gradient descent algorithm
 
-### Информация о сборке:
+### The project can be built in multiple environments:
 
-Проект можно собирать в нескольких окружениях:
+-- "dev-linux" - builds the development environment for Linux.
 
---"dev-linux" - собирает окружение для разработки под linux
+-- "dev-win" - builds the development environment for Windows.
 
---"dev-win" - собирает окружение для разработки под windows.
+### Example of building:
 
-Пример сборки:
 
 ```
 mkdir build
